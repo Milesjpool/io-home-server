@@ -1,15 +1,17 @@
 # io-home-server
 Automated setup for my home server, Io.
 
-
-There are three sections to this repo, each with their own READMEs'.
+There are two sections to this repo with their own READMEs'.
 
 ## Install
 This section is intended to capture everything up to the point that there is
 a computer, configured to act as a server, with an operating system installed.
 
-## Base provisioning
-This section will capture everthing required at runtime for my personal server setup, including services, containerisation, and routing.
+## Provisioning
+This section will capture everything required at runtime, from apps to drivers.
 
-## Dev provisioning
-This will capture everything to install beyond the base server, required for further development. None of this should be required at run-time.
+### Desktop provisioning
+This will capture everything to install for an interactive desktop environment, including dependecies required for further development of this repo.
+
+### Server provisioning
+This will capture anything required for my lightweight always-on server, including containerisation and routing.
