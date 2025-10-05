@@ -26,3 +26,26 @@ sudo systemctl enable --now docker
 USER_TO_ADD=${SUDO_USER:-$USER}
 sudo usermod -aG docker "$USER_TO_ADD"
 
+
+sudo tee /etc/systemd/system/powertop-autotune.service >/dev/null <<'EOF'
+[Unit]
+Description=Powertop autotune
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/powertop --auto-tune
+[Install]
+WantedBy=multi-user.target
+EOF
+sudo systemctl enable --now powertop-autotune.service
+
+sudo tee /etc/systemd/system/amd-epp.service >/dev/null <<'EOF'
+[Unit]
+Description=Set AMD EPP to power
+After=multi-user.target
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'for c in /sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference; do echo power > "$c"; done'
+[Install]
+WantedBy=multi-user.target
+EOF
+sudo systemctl enable --now amd-epp.service

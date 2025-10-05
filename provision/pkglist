@@ -3,6 +3,6 @@ apt-transport-https
 wget
 openssh-server
 ufw
-
 ca-certificates
 curl
+linux-tools-common

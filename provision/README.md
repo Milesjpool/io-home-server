@@ -18,12 +18,3 @@ cd io-home-server-main/provision
 ### Hardware
 This directory contains automations for server hardware, drivers etc. Install these as required.
 
-## Manual steps
-SSH access will be set-up with PasswordAuthentication enabled. Once you have added one-or-more _authorized_keys_ (e.g. with `ssh-copy-id`) make sure this is disabled.
-```
-# /etc/ssh/sshd_config
-
-PasswordAuthentication no
-
-```
-
