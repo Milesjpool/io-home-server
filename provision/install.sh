@@ -6,3 +6,7 @@ sudo apt upgrade -y
 for pkg in $(cat pkglist); do
   sudo apt-get install -y $pkg;
 done
+
+sudo systemctl enable --now ssh
+sudo ufw allow ssh
+sudo ufw enable
