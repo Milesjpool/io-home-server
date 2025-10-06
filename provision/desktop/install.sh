@@ -2,6 +2,13 @@
 
 (cd ..; ./install.sh)
 
+for repo in $(cat repolist); do
+  sudo add-apt-repository -y $repo;
+done
+
+sudo apt update
+sudo apt full-upgrade
+
 for pkg in $(cat pkglist); do
   sudo apt-get install -y $pkg;
 done

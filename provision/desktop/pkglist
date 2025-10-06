@@ -1,2 +1,4 @@
 flatpak
 gnome-software-plugin-flatpak
+mesa-utils
+vulkan-tools
