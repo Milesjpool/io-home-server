@@ -26,7 +26,7 @@ sudo systemctl enable --now docker
 USER_TO_ADD=${SUDO_USER:-$USER}
 sudo usermod -aG docker "$USER_TO_ADD"
 
-
+# Auto-tune powertop at startup.
 sudo tee /etc/systemd/system/powertop-autotune.service >/dev/null <<'EOF'
 [Unit]
 Description=Powertop autotune
@@ -38,6 +38,7 @@ WantedBy=multi-user.target
 EOF
 sudo systemctl enable --now powertop-autotune.service
 
+# Set CPU power preference.
 sudo tee /etc/systemd/system/amd-epp.service >/dev/null <<'EOF'
 [Unit]
 Description=Set AMD EPP to power
@@ -49,3 +50,25 @@ ExecStart=/bin/bash -c 'for c in /sys/devices/system/cpu/cpu*/cpufreq/energy_per
 WantedBy=multi-user.target
 EOF
 sudo systemctl enable --now amd-epp.service
+
+# Setup NAS Media mount
+MNT_DIR='/mnt/media'
+sudo mkdir -p $MNT_DIR
+
+NAS_CRED_FILE='/root/.nas-credentials'
+if [ ! -f $NAS_CRED_FILE ]; then
+  echo "Please enter the following NAS details."
+  read -p "  Hostname: " nas_host
+  echo
+  read -p "  Username: " nas_user
+  read -s -p "  Password: " nas_pass
+  echo
+  echo "username=$nas_user" | sudo tee $NAS_CRED_FILE > /dev/null
+  echo "passowrd=$nas_pass" | sudo tee -a $NAS_CRED_FILE > /dev/null
+
+  sudo chmod 600 $NAS_CRED_FILE
+
+  echo "//$nas_host/media $MNT_DIR cifs credentials=$NAS_CRED_FILE,vers=3.0,uid=1000,gid=1000 0 0" | sudo tee -a /etc/fstab
+fi
+
+

@@ -5,3 +5,5 @@ docker-buildx-plugin
 docker-compose-plugin
 
 powertop
+
+cifs-utils
