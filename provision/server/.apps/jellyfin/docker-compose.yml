@@ -1,0 +1,31 @@
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    env_file:
+      - ../global.env
+    ports:
+      # bind only to localhost; expose via reverse proxy later
+      - "127.0.0.1:8096:8096"   # HTTP
+      # - "127.0.0.1:8920:8920" # HTTPS (unless proxy terminates TLS)
+    # JELLYFIN_PublishedServerUrl: http://jellyfin.local
+    user: "${USER_UID}:${USER_GID}"
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - /srv/jellyfin/config:/config
+      - /srv/jellyfin/cache:/cache
+      - /mnt/media:/media:ro
+    networks:
+      - proxy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8096/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+networks:
+  proxy:
+    external: true
+
