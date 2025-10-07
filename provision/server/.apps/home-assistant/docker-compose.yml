@@ -1,0 +1,24 @@
+services:
+  homeassistant:
+    image: homeassistant/home-assistant:latest
+    container_name: homeassistant
+    restart: unless-stopped
+    env_file:
+      - ../global.env
+    ports:
+      - "127.0.0.1:8123:8123"
+    user: "${USER_UID}:${USER_GID}"
+    volumes:
+      - /srv/homeassistant/config:/config
+    networks:
+      - proxy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8123/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+networks:
+  proxy:
+    external: true
+
