@@ -1,6 +1,8 @@
 # io-home-server
 Automated setup for my home server, Io.
 
+![2314884512694449208.jpeg](https://github.com/user-attachments/assets/17fbe776-68a3-4502-abff-dd6f655d6615)
+
 There are two sections to this repo with their own READMEs'.
 
 ## Install
