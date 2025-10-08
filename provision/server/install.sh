@@ -15,6 +15,7 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 
+exec_user=${SUDO_USER:-$USER}
 
 for pkg in $(cat pkglist); do
   sudo apt-get install -y $pkg;
@@ -23,8 +24,7 @@ done
 gsettings set org.gnome.SessionManager logout-prompt false
 
 sudo systemctl enable --now docker
-USER_TO_ADD=${SUDO_USER:-$USER}
-sudo usermod -aG docker "$USER_TO_ADD"
+sudo usermod -aG docker "$exec_user"
 
 # Auto-tune powertop at startup.
 sudo tee /etc/systemd/system/powertop-autotune.service >/dev/null <<'EOF'
@@ -53,10 +53,14 @@ sudo systemctl enable --now amd-epp.service
 
 # Setup NAS Media mount
 MNT_DIR='/mnt/media'
+MNT_GROUP='media'
 sudo mkdir -p $MNT_DIR
+sudo groupadd $MNT_GROUP
+sudo usermod -aG $MNT_GROUP $exec_user
+echo $exec_user
 
 NAS_CRED_FILE='/root/.nas-credentials'
-if [ ! -f $NAS_CRED_FILE ]; then
+if sudo [ ! -f $NAS_CRED_FILE ]; then
   echo "Please enter the following NAS details."
   read -p "  Hostname: " nas_host
   echo
@@ -68,7 +72,7 @@ if [ ! -f $NAS_CRED_FILE ]; then
 
   sudo chmod 600 $NAS_CRED_FILE
 
-  echo "//$nas_host/media $MNT_DIR cifs credentials=$NAS_CRED_FILE,vers=3.0,uid=1000,gid=1000 0 0" | sudo tee -a /etc/fstab
+  echo "//$nas_host/media $MNT_DIR cifs credentials=$NAS_CRED_FILE,vers=3.0,uid=$exec_user,gid=$MNT_GROUP 0 0" | sudo tee -a /etc/fstab
 fi
 
 
