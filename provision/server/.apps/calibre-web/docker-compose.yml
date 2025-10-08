@@ -1,0 +1,28 @@
+services:
+  calibre:
+    image: linuxserver/calibre-web:latest
+    container_name: calibre-web
+    restart: unless-stopped
+    env_file:
+      - ../global.env
+    environment:
+      PUID: "${USER_UID}"
+      PGID: "${USER_GID}"
+      UMASK: "022"
+    ports:
+      - "127.0.0.1:8083:8083"
+    volumes:
+      - /srv/calibre/config:/config
+      - /mnt/media/Books/EBooks:/books:ro
+    networks:
+      - proxy
+    # healthcheck:
+    #   test: ["CMD", "curl", "-fsS", "http://localhost:8083/health"]
+    #   interval: 30s
+    #   timeout: 5s
+    #   retries: 5
+
+networks:
+  proxy:
+    external: true
+
