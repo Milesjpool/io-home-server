@@ -1,5 +1,5 @@
 # io-home-server
-Automated setup for my home server,[Io] (https://uk.pcpartpicker.com/b/L74scf).
+Automated setup for my home server, [Io](https://uk.pcpartpicker.com/b/L74scf).
 
 ![2314884512694449208.jpeg](https://github.com/user-attachments/assets/82c89c62-b452-4de4-a282-0afde4ea5644)
 
