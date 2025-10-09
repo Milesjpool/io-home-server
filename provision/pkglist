@@ -6,3 +6,4 @@ ufw
 ca-certificates
 curl
 linux-tools-common
+lm-sensors
