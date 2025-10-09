@@ -1,0 +1,65 @@
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    user: "${USER_UID}:${USER_GID}"
+    volumes:
+      - /srv/monitoring/prometheus:/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "127.0.0.1:9090:9090"
+    networks:
+      - proxy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9090/-/ready"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    user: "${USER_UID}:${USER_GID}"
+    volumes:
+      - /srv/monitoring/alertmanager:/alertmanager
+      - ./alertmanager/config.yml:/etc/alertmanager/config.yml:ro
+    ports:
+      - "127.0.0.1:9093:9093"
+    networks:
+      - proxy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9093/-/ready"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    user: "${USER_UID}:${USER_GID}"
+    volumes:
+      - /srv/monitoring/grafana:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      - proxy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+
+networks:
+  proxy:
+    external: true
