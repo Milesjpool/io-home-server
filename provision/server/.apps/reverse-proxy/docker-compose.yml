@@ -1,22 +1,24 @@
 services:
-  nginx:
-    image: nginx:alpine
-    container_name: revproxy
+  reverse-proxy:
+    image: caddy:latest
+    container_name: caddy
     restart: unless-stopped
     ports:
       - "127.0.0.1:80:80"
       - "127.0.0.1:443:443"
-    env_file:
-      - ../global.env
     # allow binding to :80 and :443 as non-root
-    #cap_add:
-    #  - NET_BIND_SERVICE
-    #user: "${USER_UID}:${USER_GID}"
-    # healthcheck:
-    #   test: ["CMD-SHELL", "wget -qO- http://localhost/health || exit 1"]
-    #   interval: 30s
-    #   timeout: 5s
-    #   retries: 5
+    cap_add:
+      - NET_BIND_SERVICE
+    user: "${USER_UID}:${USER_GID}"
+    volumes:
+      - /srv/revproxy/caddy/data:/data
+      - /srv/revproxy/caddy/config:/config
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
     networks:
       - proxy
 
