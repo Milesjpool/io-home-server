@@ -1,15 +1,40 @@
 :80 {
-
-  handle_path /grafana/* {
+  @grafana host grafana.io.aesop
+  handle @grafana {
     reverse_proxy grafana:3000
   }
 
-  handle_path /prometheus/* {
+  @prometheus host prometheus.io.aesop
+  handle @prometheus {
     reverse_proxy prometheus:9090
   }
 
-  handle {
-   respond "Not Found" 404
+  @alertmanager host alertmanager.io.aesop
+  handle @alertmanager {
+    reverse_proxy alertmanager:9093
   }
 
+  @adguard host adguard.io.aesop
+  handle @adguard {
+    reverse_proxy adguard:80
+  }
+
+  @jellyfin host jellyfin.io.aesop
+  handle @jellyfin {
+    reverse_proxy jellyfin:8096
+  }
+
+  @calibre host calibre.io.aesop
+  handle @calibre {
+    reverse_proxy calibre-web:8083
+  }
+
+  @homeassistant host homeassistant.io.aesop
+  handle @homeassistant {
+    reverse_proxy home-assistant:8123
+  }
+
+  handle {
+    respond "Not Found" 404
+  }
 }
