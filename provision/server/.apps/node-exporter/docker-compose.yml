@@ -1,0 +1,19 @@
+services:
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    command:
+      - '--path.rootfs=/host'
+    ports:
+      - "127.0.0.1:9100:9100/tcp"
+    volumes:
+      - /:/host:ro,rslave
+    networks:
+      - proxy
+    pid: host
+
+networks:
+  proxy:
+    external: true
+
