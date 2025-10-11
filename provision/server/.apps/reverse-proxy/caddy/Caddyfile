@@ -34,6 +34,11 @@
     reverse_proxy home-assistant:8123
   }
 
+  @portainer host portainer.io.aesop
+  handle @portainer {
+    reverse_proxy portainer:9000
+  }
+
   handle {
     respond "Not Found" 404
   }
