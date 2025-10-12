@@ -75,4 +75,20 @@ if sudo [ ! -f $NAS_CRED_FILE ]; then
   echo "//$nas_host/media $MNT_DIR cifs credentials=$NAS_CRED_FILE,vers=3.0,uid=$exec_user,gid=$MNT_GROUP 0 0" | sudo tee -a /etc/fstab
 fi
 
+# Set headless by default (can enable graphical with: sudo systemctl isolate graphical.target)
+sudo systemctl set-default multi-user.target
+
+# Set AMD iGPU to low power mode on boot
+sudo tee /etc/systemd/system/amdgpu-lowpower.service >/dev/null <<'EOF'
+[Unit]
+Description=Set AMD iGPU to low power mode
+After=multi-user.target
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'echo battery > /sys/class/drm/card2/device/power_dpm_state; echo low > /sys/class/drm/card2/device/power_dpm_force_performance_level'
+[Install]
+WantedBy=multi-user.target
+EOF
+sudo systemctl enable amdgpu-lowpower.service
+
 
