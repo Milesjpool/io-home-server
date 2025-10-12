@@ -6,6 +6,8 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
     user: "${USER_UID}:${USER_GID}"
+    extra_hosts:
+      - "docker-host:172.20.0.1"
     volumes:
       - /srv/monitoring/prometheus:/prometheus
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro

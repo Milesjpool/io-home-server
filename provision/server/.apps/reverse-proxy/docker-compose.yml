@@ -27,4 +27,8 @@ networks:
     name: proxy
     driver: bridge
     attachable: true
-
+    # Pin subnet/gateway so services can reliably reach host via 172.20.0.1 (e.g. node-exporter)
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
