@@ -15,7 +15,7 @@ services:
       - proxy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9090/-/ready"]
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:9090/-/ready" ]
       interval: 15s
       timeout: 5s
       retries: 3
@@ -36,7 +36,7 @@ services:
       - proxy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9093/-/ready"]
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:9093/-/ready" ]
       interval: 15s
       timeout: 5s
       retries: 3
@@ -54,11 +54,10 @@ services:
       - proxy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health" ]
       interval: 15s
       timeout: 5s
       retries: 3
-
 
 networks:
   proxy:
