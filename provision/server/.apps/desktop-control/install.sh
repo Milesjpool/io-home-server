@@ -30,40 +30,53 @@ sudo systemctl enable --now gdm-control.service
 
 echo "GDM control service installed"
 
-# Add Home Assistant integration if HA is installed and config doesn't exist
+# Add Home Assistant integration if HA is installed
 HA_CONFIG="/srv/homeassistant/config/configuration.yaml"
-if [ -f "$HA_CONFIG" ] && ! sudo grep -q "desktop_start:" "$HA_CONFIG" 2>/dev/null; then
-  echo "Adding Desktop control to Home Assistant..."
-  sudo tee -a "$HA_CONFIG" >/dev/null <<EOF
+HA_REST_COMMANDS="/srv/homeassistant/config/rest_commands.yaml"
+HA_SENSORS="/srv/homeassistant/config/sensors.yaml"
+HA_SWITCHES="/srv/homeassistant/config/switches.yaml"
 
-# Desktop control commands
-rest_command:
-  desktop_start:
-    url: "http://$DOCKER_GATEWAY:8888/start"
-  desktop_stop:
-    url: "http://$DOCKER_GATEWAY:8888/stop"
-
-# Desktop status sensor
-sensor:
-  - platform: rest
-    name: "Io Desktop Status"
-    resource: "http://$DOCKER_GATEWAY:8888/status"
-    scan_interval: 5
-    value_template: "{{ value }}"
-
-# Desktop control switch
-switch:
-  - platform: template
-    switches:
-      desktop:
-        friendly_name: "Io Desktop"
-        value_template: "{{ states('sensor.desktop_status') == 'active' }}"
-        turn_on:
-          service: rest_command.desktop_start
-        turn_off:
-          service: rest_command.desktop_stop
+# Add desktop rest_commands if not present
+if [ -f "$HA_REST_COMMANDS" ] && ! sudo grep -q "desktop_start:" "$HA_REST_COMMANDS" 2>/dev/null; then
+  echo "Adding Desktop controls to Home Assistant..."
+  sudo tee -a "$HA_REST_COMMANDS" >/dev/null <<EOF
+desktop_start:
+  method: get
+  url: "http://$DOCKER_GATEWAY:8888/start"
+desktop_stop:
+  method: get
+  url: "http://$DOCKER_GATEWAY:8888/stop"
 EOF
-  docker restart home-assistant 2>/dev/null && echo "Home Assistant restarted with Desktop switch"
+fi
+
+# Add desktop sensor if sensors.yaml exists
+if [ -f "$HA_SENSORS" ] && ! sudo grep -q "Io Desktop Status" "$HA_SENSORS" 2>/dev/null; then
+  echo "Adding Desktop sensor to Home Assistant..."
+  sudo tee -a "$HA_SENSORS" >/dev/null <<EOF
+- platform: rest
+  name: "Io Desktop Status"
+  resource: "http://$DOCKER_GATEWAY:8888/status"
+  scan_interval: 5
+  value_template: "{{ value }}"
+EOF
+  docker restart home-assistant 2>/dev/null && echo "Home Assistant restarted with Desktop integration"
+fi
+
+# Add desktop switch if switches.yaml exists
+if [ -f "$HA_SWITCHES" ] && ! sudo grep -q "friendly_name: \"Io Desktop\"" "$HA_SWITCHES" 2>/dev/null; then
+  echo "Adding Desktop switch to Home Assistant..."
+  sudo tee -a "$HA_SWITCHES" >/dev/null <<EOF
+- platform: template
+  switches:
+    desktop:
+      friendly_name: "Io Desktop"
+      value_template: "{{ states('sensor.io_desktop_status') == 'active' }}"
+      turn_on:
+        service: rest_command.desktop_start
+      turn_off:
+        service: rest_command.desktop_stop
+EOF
+  docker restart home-assistant 2>/dev/null && echo "Home Assistant restarted with Desktop integration"
 fi
 
 echo "Usage:"
