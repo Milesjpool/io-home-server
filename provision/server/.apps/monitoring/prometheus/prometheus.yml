@@ -13,5 +13,6 @@ scrape_configs:
       - targets: ["localhost:9090"]
 
   - job_name: "node-exporter"
+    # docker-host resolves to DOCKER_GATEWAY via extra_hosts
     static_configs:
       - targets: ["docker-host:9100"]

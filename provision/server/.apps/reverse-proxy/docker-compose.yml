@@ -3,6 +3,10 @@ services:
     image: caddy:latest
     container_name: caddy
     restart: unless-stopped
+    env_file:
+      - ../global.env
+    extra_hosts:
+      - "docker-host:${DOCKER_GATEWAY}"
     ports:
       - "80:80"
       - "443:443"
@@ -27,8 +31,8 @@ networks:
     name: proxy
     driver: bridge
     attachable: true
-    # Pin subnet/gateway so services can reliably reach host via 172.20.0.1 (e.g. node-exporter)
+    # Pin subnet/gateway so services can reliably reach host via DOCKER_GATEWAY (e.g. node-exporter)
     ipam:
       config:
-        - subnet: 172.20.0.0/16
-          gateway: 172.20.0.1
+        - subnet: ${DOCKER_SUBNET}
+          gateway: ${DOCKER_GATEWAY}

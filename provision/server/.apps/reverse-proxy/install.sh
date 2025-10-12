@@ -15,6 +15,8 @@ sudo ufw allow from $NETMASK to any port 443 proto tcp
 
 USER_UID="$(id $SVC_USER -u)" \
   USER_GID="$(id $SVC_USER -g)" \
+  DOCKER_SUBNET="$DOCKER_SUBNET" \
+  DOCKER_GATEWAY="$DOCKER_GATEWAY" \
   docker compose up -d \
   --force-recreate
 
