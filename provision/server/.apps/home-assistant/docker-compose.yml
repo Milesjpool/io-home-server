@@ -5,20 +5,13 @@ services:
     restart: unless-stopped
     env_file:
       - ../global.env
-    ports:
-      - "127.0.0.1:8123:8123"
+    # Use host network for auto-discovery (mDNS, SSDP, UPnP)
+    network_mode: host
     user: "${USER_UID}:${USER_GID}"
     volumes:
       - /srv/homeassistant/config:/config
-    networks:
-      - proxy
     # healthcheck:
     #   test: ["CMD", "curl", "-fsS", "http://localhost:8123/health"]
     #   interval: 30s
     #   timeout: 5s
     #   retries: 5
-
-networks:
-  proxy:
-    external: true
-

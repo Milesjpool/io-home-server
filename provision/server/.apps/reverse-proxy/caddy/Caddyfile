@@ -31,7 +31,7 @@
 
   @homeassistant host homeassistant.io.aesop
   handle @homeassistant {
-    reverse_proxy home-assistant:8123
+    reverse_proxy docker-host:8123
   }
 
   @portainer host portainer.io.aesop
