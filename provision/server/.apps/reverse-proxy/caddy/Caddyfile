@@ -39,6 +39,11 @@
     reverse_proxy portainer:9000
   }
 
+  @desktop host desktop.io.aesop
+  handle @desktop {
+    reverse_proxy docker-host:8888
+  }
+
   handle {
     respond "Not Found" 404
   }
