@@ -38,3 +38,5 @@ echo 'y' | sudo ufw enable
 
 echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/nopasswd-$USER >/dev/null
 sudo chmod 0440 /etc/sudoers.d/nopasswd-$USER
+
+sudo usermod -aG video $USER
