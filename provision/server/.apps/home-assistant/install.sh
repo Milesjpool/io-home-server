@@ -17,12 +17,13 @@ sudo useradd -r -s /usr/sbin/nologin -d $SVC_HOME $SVC_USER
 sudo usermod -aG users $SVC_USER
 sudo chown -R $SVC_USER:$SVC_USER $SVC_HOME
 
-if ! sudo grep -q "use_x_forwarded_for: true" $SVC_HOME/config/configuration.yaml 2>/dev/null; then
-  sudo tee -a $SVC_HOME/config/configuration.yaml >/dev/null <<'EOF'
+if ! sudo grep -q "$DOCKER_SUBNET" $SVC_HOME/config/configuration.yaml 2>/dev/null; then
+  sudo tee -a $SVC_HOME/config/configuration.yaml >/dev/null <<EOF
 
 http:
   use_x_forwarded_for: true
   trusted_proxies:
+    - $DOCKER_SUBNET
     - 127.0.0.1
     - ::1
 EOF
