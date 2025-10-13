@@ -15,6 +15,12 @@ SYSCTL_FORWARD="net.ipv4.ip_forward=1"
 sudo sysctl -w $SYSCTL_FORWARD
 grep -q "^$SYSCTL_FORWARD" /etc/sysctl.conf || echo "$SYSCTL_FORWARD" | sudo tee -a /etc/sysctl.conf >/dev/null
 
+UFW_RULES_DIR="/etc/ufw/user.rules.d"
+sudo mkdir -p $UFW_RULES_DIR
+IFACE=$(ip route | grep default | awk '{print $5}')
+sed "s|__INTERFACE__|$IFACE|g" wireguard-nat.rules | sudo tee $UFW_RULES_DIR/wireguard-nat.rules >/dev/null
+sudo ufw reload
+
 USER_UID="$(id $SVC_USER -u)" \
   USER_GID="$(id $SVC_USER -g)" \
   SERVERURL="${SERVER_PUBLIC_URL:-auto}" \

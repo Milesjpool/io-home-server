@@ -1,0 +1,5 @@
+# NAT for WireGuard VPN traffic
+*nat
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -s 10.8.0.0/24 -o __INTERFACE__ -j MASQUERADE
+COMMIT
