@@ -25,3 +25,19 @@ services:
       - /lib/modules:/lib/modules:ro
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
+
+  wireguard-configs:
+    image: nginxinc/nginx-unprivileged:alpine
+    container_name: wireguard-configs
+    restart: unless-stopped
+    user: "${USER_UID}:${USER_GID}"
+    volumes:
+      - /srv/wireguard/config:/usr/share/nginx/html:ro
+      - ./cred-server/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./cred-server/www:/var/www:ro
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true

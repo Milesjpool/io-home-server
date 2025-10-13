@@ -51,6 +51,11 @@
     reverse_proxy docker-host:8888
   }
 
+  @vpn host vpn.io.aesop
+  handle @vpn {
+    reverse_proxy wireguard-configs:8080
+  }
+
   handle {
     respond "Not Found" 404
   }

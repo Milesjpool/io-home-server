@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WireGuard VPN Configs</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+      color: #2d3748;
+    }
+
+    .subtitle {
+      color: #718096;
+      margin-bottom: 40px;
+      font-size: 1.1em;
+    }
+
+    ul {
+      list-style: none;
+      display: grid;
+      gap: 16px;
+    }
+
+    li {
+      position: relative;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      padding: 20px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      text-decoration: none;
+      color: white;
+      border-radius: 12px;
+      font-size: 1.1em;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(102, 126, 234, 0.4);
+    }
+
+    a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(102, 126, 234, 0.6);
+    }
+
+    a::before {
+      content: '🔐';
+      margin-right: 12px;
+      font-size: 1.3em;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>WireGuard VPN</h1>
+    <p class="subtitle">Select a peer to view configuration</p>
+    <ul id="peers"></ul>
+  </div>
+  <script>
+    fetch('/_list')
+      .then(r => r.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const links = doc.querySelectorAll('a[href]');
+        const ul = document.getElementById('peers');
+
+        links.forEach(link => {
+          const href = link.getAttribute('href');
+          if (href.match(/^peer\d+\/$/)) {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = href;
+            a.textContent = href.replace('/', '').replace('peer', 'Peer ');
+            li.appendChild(a);
+            ul.appendChild(li);
+          }
+        });
+      });
+  </script>
+</body>
+
+</html>
