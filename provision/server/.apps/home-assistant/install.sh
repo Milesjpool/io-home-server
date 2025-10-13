@@ -9,7 +9,7 @@ SVC_HOME=$HA_HOME
 sudo useradd -r -s /usr/sbin/nologin -d $SVC_HOME $SVC_USER
 sudo usermod -aG users $SVC_USER
 
-sudo ufw allow from $DOCKER_SUBNET to any port 8123 proto tcp
+sudo ufw allow from $DOCKER_SUBNET to any port 8123 proto tcp comment 'Caddy to Home Assistant'
 
 sudo mkdir -p $HA_PACKAGES
 

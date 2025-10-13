@@ -17,8 +17,8 @@ if systemctl is-active --quiet systemd-resolved; then
   sudo systemctl disable systemd-resolved
 fi
 
-sudo ufw allow from $NETMASK to any port 53 proto udp
-sudo ufw allow from $NETMASK to any port 53 proto tcp
+sudo ufw allow from $NETMASK to any port 53 proto udp comment 'AdGuard DNS'
+sudo ufw allow from $NETMASK to any port 53 proto tcp comment 'AdGuard DNS'
 
 USER_UID="$(id $SVC_USER -u)" \
   USER_GID="$(id $SVC_USER -g)" \

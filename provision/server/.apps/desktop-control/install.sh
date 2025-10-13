@@ -5,7 +5,7 @@ source ../home-assistant/.env
 
 chmod +x gdm-control.py
 
-sudo ufw allow from $DOCKER_SUBNET to any port 8888 proto tcp
+sudo ufw allow from $DOCKER_SUBNET to any port 8888 proto tcp comment 'Home Assistant to desktop control'
 
 sed "s|__INSTALL_DIR__|$(pwd)|g" gdm-control.service.template | \
   sudo tee /etc/systemd/system/gdm-control.service >/dev/null
