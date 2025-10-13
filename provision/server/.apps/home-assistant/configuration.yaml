@@ -1,0 +1,13 @@
+# Loads default set of integrations. Do not remove.
+default_config:
+
+homeassistant:
+  packages: !include_dir_named packages
+
+# Trust localhost connections
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 127.0.0.1
+    - ::1
+
