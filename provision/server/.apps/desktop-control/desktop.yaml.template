@@ -1,0 +1,35 @@
+# Desktop control integration for GDM start/stop via HTTP service
+
+rest_command:
+  desktop_start:
+    method: get
+    url: "http://__SVC_ADDR__:8888/start"
+  desktop_stop:
+    method: get
+    url: "http://__SVC_ADDR__:8888/stop"
+
+template:
+  - switch:
+      - name: "Io Desktop"
+        unique_id: io_desktop_switch
+        state: >
+          {{ states('sensor.io_desktop_status') == 'active' }}
+        turn_on:
+          - service: rest_command.desktop_start
+          - service: homeassistant.update_entity
+            target:
+              entity_id: sensor.io_desktop_status
+        turn_off:
+          - service: rest_command.desktop_stop
+          - service: homeassistant.update_entity
+            target:
+              entity_id: sensor.io_desktop_status
+
+sensor:
+  - platform: rest
+    name: "Io Desktop Status"
+    unique_id: io_desktop_status
+    resource: "http://__SVC_ADDR__:8888/status"
+    scan_interval: 5
+    value_template: "{{ value }}"
+
