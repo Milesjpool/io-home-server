@@ -10,7 +10,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    # allow binding to :80 and :443 as non-root
+      - "2019:2019"
     cap_add:
       - NET_BIND_SERVICE
     user: "${USER_UID}:${USER_GID}"

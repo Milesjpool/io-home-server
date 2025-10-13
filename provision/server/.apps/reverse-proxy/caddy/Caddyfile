@@ -1,3 +1,10 @@
+{
+  admin 0.0.0.0:2019
+  servers {
+    metrics
+  }
+}
+
 :80 {
   @grafana host grafana.io.aesop
   handle @grafana {

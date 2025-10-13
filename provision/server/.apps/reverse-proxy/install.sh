@@ -13,6 +13,7 @@ sudo chown -R $SVC_USER:$SVC_USER $SVC_HOME
 
 sudo ufw allow from $NETMASK to any port 80 proto tcp
 sudo ufw allow from $NETMASK to any port 443 proto tcp
+sudo ufw allow from $DOCKER_SUBNET to any port 2019 proto tcp comment 'Docker network to Caddy metrics'
 
 if [ -d "$HA_PACKAGES" ]; then
   HA_REVPROXY="$HA_PACKAGES/reverse_proxy.yaml"
