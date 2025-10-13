@@ -30,7 +30,7 @@ if ! sudo ss -tlnp | grep -q sshd; then
   echo "PasswordAuthentication no" | sudo tee -a /etc/ssh/sshd_config
   echo "Port $SSH_PORT" | sudo tee -a /etc/ssh/sshd_config
 
-  sudo ufw allow $SSH_PORT/tcp
+  sudo ufw allow $SSH_PORT/tcp comment 'SSH'
 fi
 
 sudo systemctl enable --now ssh
