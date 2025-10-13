@@ -2,6 +2,8 @@
 
 (cd ..; ./install.sh)
 
+exec_user=${SUDO_USER:-$USER}
+
 # Add Docker's official GPG key:
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
@@ -14,56 +16,26 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 
-exec_user=${SUDO_USER:-$USER}
-
 for pkg in $(cat pkglist); do
   sudo apt-get install -y $pkg;
 done
 
-gsettings set org.gnome.SessionManager logout-prompt false
-
-sudo systemctl enable --now docker
 sudo usermod -aG docker "$exec_user"
 
+sudo cp powertop-autotune.service \
+  amd-epp.service \
+  amdgpu-lowpower.service \
+  /etc/systemd/system/
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now \
+  docker \
+  powertop-autotune.service \
+  amd-epp.service \
+  amdgpu-lowpower.service
+
+gsettings set org.gnome.SessionManager logout-prompt false
 sudo systemctl set-default multi-user.target
-
-# Auto-tune powertop at startup.
-sudo tee /etc/systemd/system/powertop-autotune.service >/dev/null <<'EOF'
-[Unit]
-Description=Powertop autotune
-[Service]
-Type=oneshot
-ExecStart=/usr/sbin/powertop --auto-tune
-[Install]
-WantedBy=multi-user.target
-EOF
-sudo systemctl enable --now powertop-autotune.service
-
-# Set CPU power preference.
-sudo tee /etc/systemd/system/amd-epp.service >/dev/null <<'EOF'
-[Unit]
-Description=Set AMD EPP to power
-After=multi-user.target
-[Service]
-Type=oneshot
-ExecStart=/bin/bash -c 'for c in /sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference; do echo power > "$c"; done'
-[Install]
-WantedBy=multi-user.target
-EOF
-sudo systemctl enable --now amd-epp.service
-
-# Set AMD iGPU to low power mode on boot
-sudo tee /etc/systemd/system/amdgpu-lowpower.service >/dev/null <<'EOF'
-[Unit]
-Description=Set AMD iGPU to low power mode
-After=multi-user.target
-[Service]
-Type=oneshot
-ExecStart=/bin/bash -c 'echo battery > /sys/class/drm/card2/device/power_dpm_state; echo low > /sys/class/drm/card2/device/power_dpm_force_performance_level'
-[Install]
-WantedBy=multi-user.target
-EOF
-sudo systemctl enable amdgpu-lowpower.service
 
 # Setup NAS Media mount
 MNT_DIR='/mnt/media'

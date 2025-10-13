@@ -1,0 +1,9 @@
+[Unit]
+Description=Set AMD iGPU to low power mode
+After=multi-user.target
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'echo battery > /sys/class/drm/card2/device/power_dpm_state; echo low > /sys/class/drm/card2/device/power_dpm_force_performance_level'
+[Install]
+WantedBy=multi-user.target
+
