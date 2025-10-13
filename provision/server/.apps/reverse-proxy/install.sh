@@ -1,6 +1,7 @@
 #! /bin/bash
 
 source ../global.env
+source ../home-assistant/.env
 
 SVC_USER='svc-revproxy'
 SVC_HOME='/srv/revproxy'
@@ -12,6 +13,14 @@ sudo chown -R $SVC_USER:$SVC_USER $SVC_HOME
 
 sudo ufw allow from $NETMASK to any port 80 proto tcp
 sudo ufw allow from $NETMASK to any port 443 proto tcp
+
+if [ -d "$HA_PACKAGES" ]; then
+  HA_REVPROXY="$HA_PACKAGES/reverse_proxy.yaml"
+  sed "s|__DOCKER_SUBNET__|$DOCKER_SUBNET|g" reverse_proxy.yaml.template | \
+    sudo tee "$HA_REVPROXY" >/dev/null
+  sudo chown $HA_USER:$HA_USER "$HA_REVPROXY"
+  docker restart home-assistant
+fi
 
 USER_UID="$(id $SVC_USER -u)" \
   USER_GID="$(id $SVC_USER -g)" \
