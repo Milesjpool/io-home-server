@@ -4,7 +4,7 @@ services:
     container_name: home-assistant
     restart: unless-stopped
     env_file:
-      - ../global.env
+      - ../../global.env
     # Use host network for auto-discovery (mDNS, SSDP, UPnP)
     network_mode: host
     user: "${USER_UID}:${USER_GID}"

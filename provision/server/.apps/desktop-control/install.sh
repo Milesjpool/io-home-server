@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ../global.env
+source ../../global.env
 source ../home-assistant/.env
 
 chmod +x gdm-control.py

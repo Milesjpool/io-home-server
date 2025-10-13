@@ -1,6 +1,6 @@
 #! /bin/bash
 
-source ../global.env
+source ../../global.env
 
 SVC_USER='svc-adguard'
 SVC_HOME='/srv/adguard'

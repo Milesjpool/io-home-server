@@ -4,7 +4,7 @@ services:
     container_name: jellyfin
     restart: unless-stopped
     env_file:
-      - ../global.env
+      - ../../global.env
     environment:
       - LIBVA_DRIVER_NAME=iHD
     ports:

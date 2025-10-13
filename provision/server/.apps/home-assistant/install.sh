@@ -1,6 +1,6 @@
 #! /bin/bash
 
-source ../global.env
+source ../../global.env
 source .env
 
 SVC_USER=$HA_USER

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ../global.env
+source ../../global.env
 source ../home-assistant/.env
 
 SVC_ADDR='desk.aesop'

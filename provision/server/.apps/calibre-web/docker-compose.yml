@@ -4,7 +4,7 @@ services:
     container_name: calibre-web
     restart: unless-stopped
     env_file:
-      - ../global.env
+      - ../../global.env
     environment:
       PUID: "${USER_UID}"
       PGID: "${USER_GID}"
@@ -25,4 +25,3 @@ services:
 networks:
   proxy:
     external: true
-

@@ -1,6 +1,6 @@
 #! /bin/bash
 
-source ../global.env
+source ../../global.env
 
 SVC_USER='svc-monitoring'
 SVC_HOME='/srv/monitoring'

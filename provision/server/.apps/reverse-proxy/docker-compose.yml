@@ -4,7 +4,7 @@ services:
     container_name: caddy
     restart: unless-stopped
     env_file:
-      - ../global.env
+      - ../../global.env
     extra_hosts:
       - "docker-host:${DOCKER_GATEWAY}"
     ports:
