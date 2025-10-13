@@ -65,12 +65,72 @@
 <body>
     <div class="back"><a href="/">&larr; Back to all peers</a></div>
     <h1 id="title">Peer Config Files</h1>
-    <div id="qr-container" style="text-align: center; margin: 30px 0;"></div>
-    <ul id="files"></ul>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin: 30px 0;">
+        <div id="full-tunnel"></div>
+        <div id="split-tunnel"></div>
+    </div>
+
     <script>
         const path = window.location.pathname;
         const peerName = path.match(/peer\d+/)[0];
-        document.getElementById('title').textContent = peerName.toUpperCase() + ' Config';
+        document.getElementById('title').textContent = peerName.toUpperCase() + ' VPN Configs';
+
+        function createConfigCard(title, subtitle, confFile, pngFile, containerId) {
+            const container = document.getElementById(containerId);
+
+            const heading = document.createElement('h2');
+            heading.textContent = title;
+            heading.style.marginBottom = '10px';
+            heading.style.fontSize = '1.3em';
+            container.appendChild(heading);
+
+            const desc = document.createElement('p');
+            desc.textContent = subtitle;
+            desc.style.color = '#666';
+            desc.style.marginBottom = '20px';
+            container.appendChild(desc);
+
+            if (pngFile) {
+                const qrDiv = document.createElement('div');
+                qrDiv.style.textAlign = 'center';
+                qrDiv.style.marginBottom = '20px';
+
+                const img = document.createElement('img');
+                img.src = pngFile;
+                img.style.maxWidth = '100%';
+                img.style.border = '1px solid #ddd';
+                img.style.borderRadius = '8px';
+                img.style.padding = '20px';
+                img.style.background = '#fff';
+                qrDiv.appendChild(img);
+
+                const caption = document.createElement('p');
+                caption.textContent = 'Scan with mobile';
+                caption.style.color = '#999';
+                caption.style.marginTop = '10px';
+                caption.style.fontSize = '0.9em';
+                qrDiv.appendChild(caption);
+
+                container.appendChild(qrDiv);
+            }
+
+            if (confFile) {
+                const a = document.createElement('a');
+                a.href = confFile;
+                a.textContent = '📄 Download Config';
+                a.download = confFile;
+                a.style.display = 'block';
+                a.style.padding = '12px 20px';
+                a.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                a.style.color = 'white';
+                a.style.textDecoration = 'none';
+                a.style.borderRadius = '8px';
+                a.style.textAlign = 'center';
+                a.style.fontWeight = '500';
+                container.appendChild(a);
+            }
+        }
 
         fetch(path + '_list')
             .then(r => r.text())
@@ -78,49 +138,32 @@
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
                 const links = doc.querySelectorAll('a[href]');
-                const qrContainer = document.getElementById('qr-container');
-                const ul = document.getElementById('files');
 
-                let pngFile = null;
-                let confFile = null;
+                let fullConf = null, fullPng = null;
+                let splitConf = null, splitPng = null;
 
                 links.forEach(link => {
                     const href = link.getAttribute('href');
-                    if (href.endsWith('.png')) {
-                        pngFile = href;
-                    } else if (href.endsWith('.conf')) {
-                        confFile = href;
-                    }
+                    if (href === peerName + '.conf') fullConf = href;
+                    else if (href === peerName + '.png') fullPng = href;
+                    else if (href === peerName + '-split.conf') splitConf = href;
+                    else if (href === peerName + '-split.png') splitPng = href;
                 });
 
-                // Show QR code inline
-                if (pngFile) {
-                    const img = document.createElement('img');
-                    img.src = pngFile;
-                    img.style.maxWidth = '400px';
-                    img.style.border = '1px solid #ddd';
-                    img.style.borderRadius = '8px';
-                    img.style.padding = '20px';
-                    img.style.background = '#fff';
-                    qrContainer.appendChild(img);
-
-                    const caption = document.createElement('p');
-                    caption.textContent = 'Scan with your mobile device';
-                    caption.style.color = '#666';
-                    caption.style.marginTop = '10px';
-                    qrContainer.appendChild(caption);
+                if (fullConf || fullPng) {
+                    createConfigCard(
+                        '🌍 Full Tunnel',
+                        'All traffic routed through VPN',
+                        fullConf, fullPng, 'full-tunnel'
+                    );
                 }
 
-                // Show conf file as download button
-                if (confFile) {
-                    const li = document.createElement('li');
-                    const a = document.createElement('a');
-                    a.href = confFile;
-                    a.className = 'conf';
-                    a.textContent = '📄 Download Configuration File';
-                    a.download = confFile;
-                    li.appendChild(a);
-                    ul.appendChild(li);
+                if (splitConf || splitPng) {
+                    createConfigCard(
+                        '🏠 Split Tunnel',
+                        'Only LAN traffic through VPN',
+                        splitConf, splitPng, 'split-tunnel'
+                    );
                 }
             });
     </script>

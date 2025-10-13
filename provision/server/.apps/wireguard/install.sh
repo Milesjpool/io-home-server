@@ -30,3 +30,29 @@ USER_UID="$(id $SVC_USER -u)" \
   docker compose up -d \
   --force-recreate
 
+# Generate split-tunnel versions of peer configs
+# Wait for WireGuard to generate peer configs
+until sudo [ -f "$SVC_HOME/config/peer1/peer1.conf" ]; do
+  echo "Waiting for WireGuard to generate configs..."
+  sleep 1
+done
+
+for peer_dir in $SVC_HOME/config/peer*; do
+  if [ -d "$peer_dir" ]; then
+    peer_name=$(basename "$peer_dir")
+    conf_file="$peer_dir/$peer_name.conf"
+    split_file="$peer_dir/${peer_name}-split.conf"
+    split_png="$peer_dir/${peer_name}-split.png"
+    
+    if sudo [ -f "$conf_file" ] && ! sudo [ -f "$split_file" ]; then
+      # Create split-tunnel version (LAN + VPN subnet only)
+      sudo sed "s|AllowedIPs = 0.0.0.0/0|AllowedIPs = $NETMASK, $VPN_SUBNET|g" "$conf_file" | sudo tee "$split_file" >/dev/null
+      
+      # Generate QR code PNG for split-tunnel version
+      sudo cat "$split_file" | sudo docker exec -i wireguard qrencode -t png -o "/config/$peer_name/${peer_name}-split.png"
+      
+      echo "✓ Generated split-tunnel: $peer_name"
+    fi
+  fi
+done
+
