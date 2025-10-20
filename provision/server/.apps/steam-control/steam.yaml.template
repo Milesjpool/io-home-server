@@ -1,0 +1,34 @@
+# Steam control integration for Steam Big Picture start/stop via HTTP service
+
+rest_command:
+  steam_start:
+    method: get
+    url: "http://__SVC_ADDR__:8889/start"
+  steam_stop:
+    method: get
+    url: "http://__SVC_ADDR__:8889/stop"
+
+template:
+  - switch:
+      - name: "Io Steam"
+        unique_id: io_steam_switch
+        state: >
+          {{ states('sensor.io_steam_status') == 'active' }}
+        turn_on:
+          - service: rest_command.steam_start
+          - service: homeassistant.update_entity
+            target:
+              entity_id: sensor.io_steam_status
+        turn_off:
+          - service: rest_command.steam_stop
+          - service: homeassistant.update_entity
+            target:
+              entity_id: sensor.io_steam_status
+
+sensor:
+  - platform: rest
+    name: "Io Steam Status"
+    unique_id: io_steam_status
+    resource: "http://__SVC_ADDR__:8889/status"
+    scan_interval: 5
+    value_template: "{{ value }}"

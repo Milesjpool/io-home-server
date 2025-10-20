@@ -1,0 +1,12 @@
+[Unit]
+Description=Steam Control HTTP Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=__INSTALL_DIR__/steam-control.py
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
