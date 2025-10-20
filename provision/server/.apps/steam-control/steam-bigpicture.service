@@ -1,0 +1,17 @@
+[Unit]
+Description=Steam Big Picture Mode
+After=steam-x.service
+Requires=steam-x.service
+
+[Service]
+Type=simple
+User=miles
+Group=miles
+Environment=DISPLAY=:0
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+ExecStart=/snap/bin/steam -bigpicture -steamos
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
