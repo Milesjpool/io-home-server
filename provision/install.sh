@@ -8,6 +8,7 @@ for pkg in $(cat pkglist); do
 done
 
 sudo apt install "linux-tools-$(uname -r)"
+sudo apt install "linux-headers-$(uname -r)"
 
 GRUBFILE="/etc/default/grub"
 if ! grep -q 'amd_pstate' "$GRUBFILE"; then

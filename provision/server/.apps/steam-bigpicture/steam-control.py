@@ -11,8 +11,7 @@ class SteamControlHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/start':
             try:
-                # Start X server first, then Steam
-                subprocess.run(['sudo', 'systemctl', 'start', 'steam-x'], check=True)
+                # Start Steam Big Picture (includes X server)
                 subprocess.run(['sudo', 'systemctl', 'start', 'steam-bigpicture'], check=True)
                 self.send_response(200)
                 self.end_headers()
@@ -24,9 +23,8 @@ class SteamControlHandler(BaseHTTPRequestHandler):
                 
         elif self.path == '/stop':
             try:
-                # Stop Steam first, then X server
+                # Stop Steam Big Picture (includes X server)
                 subprocess.run(['sudo', 'systemctl', 'stop', 'steam-bigpicture'], check=True)
-                subprocess.run(['sudo', 'systemctl', 'stop', 'steam-x'], check=True)
                 self.send_response(200)
                 self.end_headers()
                 self.wfile.write(b'Steam Big Picture stopped\n')

@@ -1,0 +1,3 @@
+[submodule "provision/server/.apps/steam-bigpicture/xpadneo"]
+	path = provision/server/.apps/steam-bigpicture/xpadneo
+	url = https://github.com/atar-axis/xpadneo.git

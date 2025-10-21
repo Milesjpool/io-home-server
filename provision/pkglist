@@ -8,4 +8,4 @@ curl
 linux-tools-common
 lm-sensors
 smartmontools
-firmware-realtek
+dkms

@@ -7,17 +7,12 @@ for pkg in $(cat pkglist); do
   sudo apt-get install -y $pkg;
 done
 
-# Configure X11 permissions for non-root access (idempotent)
-if ! grep -q "allowed_users=anybody" /etc/X11/Xwrapper.config 2>/dev/null; then
-  echo "allowed_users=anybody" | sudo tee /etc/X11/Xwrapper.config
-fi
-if ! grep -q "needs_root_rights=no" /etc/X11/Xwrapper.config 2>/dev/null; then
-  echo "needs_root_rights=no" | sudo tee -a /etc/X11/Xwrapper.config
-fi
 
-# Install Steam X server service
-sudo cp steam-x.service /etc/systemd/system/
-sudo cp steam-bigpicture.service /etc/systemd/system/
+# Install Steam Big Picture service
+sed "s|__USER__|$USER|g; s|__UID__|$(id -u)|g" steam-bigpicture.service.template | \
+  sudo tee /etc/systemd/system/steam-bigpicture.service >/dev/null
+sudo cp start-steam-bigpicture.sh /usr/local/bin/start-steam-bigpicture.sh
+sudo chmod +x /usr/local/bin/start-steam-bigpicture.sh
 
 # Install Steam control service
 chmod +x steam-control.py
