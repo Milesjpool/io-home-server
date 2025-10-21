@@ -5,8 +5,7 @@ After=multi-user.target
 [Service]
 Type=simple
 User=root
-Environment=XDG_RUNTIME_DIR=/run/user/__UID__
-ExecStart=/usr/local/bin/start-steam-bigpicture.sh __USER__
+ExecStart=/usr/local/bin/start-steam-bigpicture.sh __USER_UID__
 Restart=always
 RestartSec=5
 

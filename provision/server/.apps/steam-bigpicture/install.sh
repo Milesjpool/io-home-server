@@ -7,9 +7,8 @@ for pkg in $(cat pkglist); do
   sudo apt-get install -y $pkg;
 done
 
-
 # Install Steam Big Picture service
-sed "s|__USER__|$USER|g; s|__UID__|$(id -u)|g" steam-bigpicture.service.template | \
+sed "s|__USER_UID__|$(id -u)|g" steam-bigpicture.service.template | \
   sudo tee /etc/systemd/system/steam-bigpicture.service >/dev/null
 sudo cp start-steam-bigpicture.sh /usr/local/bin/start-steam-bigpicture.sh
 sudo chmod +x /usr/local/bin/start-steam-bigpicture.sh
