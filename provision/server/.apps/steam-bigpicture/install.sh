@@ -7,6 +7,8 @@ for pkg in $(cat pkglist); do
   sudo apt-get install -y $pkg;
 done
 
+sudo usermod -aG bluetooth,input $USER
+
 # Install Steam Big Picture service
 sed "s|__USER_UID__|$(id -u)|g" steam-bigpicture.service.template | \
   sudo tee /etc/systemd/system/steam-bigpicture.service >/dev/null
