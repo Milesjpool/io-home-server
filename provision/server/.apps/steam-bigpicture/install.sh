@@ -8,6 +8,13 @@ for pkg in $(cat pkglist); do
 done
 
 sudo usermod -aG bluetooth,input $USER
+sudo usermod -aG video,render $USER
+
+# Enable user namespaces for Steam (required for modern Steam)
+if ! grep -q "kernel.unprivileged_userns_clone=1" /etc/sysctl.conf; then
+  echo 'kernel.unprivileged_userns_clone=1' | sudo tee -a /etc/sysctl.conf
+fi
+sudo sysctl -p
 
 # Install Steam Big Picture service
 sed "s|__USER_UID__|$(id -u)|g" steam-bigpicture.service.template | \
