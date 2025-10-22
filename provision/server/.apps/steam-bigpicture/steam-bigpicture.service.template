@@ -5,7 +5,7 @@ After=multi-user.target
 [Service]
 Type=simple
 User=root
-ExecStart=/usr/local/bin/start-steam-bigpicture.sh __USER_UID__
+ExecStart=/usr/local/bin/start-steam-bigpicture.sh __USER_UID__ __CONTROLLER_MAC__
 Restart=on-failure
 RestartSec=5
 

@@ -1,0 +1,10 @@
+# udev rule to detect Xbox Wireless Controller and trigger Steam Big Picture
+
+# Xbox Wireless Controller (Vendor: 045e, Product: 028e, Bus: 0005)
+SUBSYSTEM=="input", ATTRS{id/vendor}=="045e", ATTRS{id/product}=="028e", ATTRS{id/bustype}=="0005", ACTION=="add", RUN+="/bin/systemctl start steam-bigpicture.service"
+
+# Alternative detection by device name
+SUBSYSTEM=="input", ATTRS{name}=="Xbox Wireless Controller", ACTION=="add", RUN+="/bin/systemctl start steam-bigpicture.service"
+
+# Specific controller detection (most precise)
+SUBSYSTEM=="input", ATTRS{uniq}=="__CONTROLLER_MAC__", ACTION=="add", RUN+="/bin/systemctl start steam-bigpicture.service"

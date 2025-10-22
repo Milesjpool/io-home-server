@@ -1,6 +1,7 @@
 #!/bin/bash
 
 USER_UID="$1"
+CONTROLLER_MAC="$2"
 export DISPLAY=:0
 
 # Start X server as root (for console access)
@@ -27,6 +28,10 @@ cleanup() {
   echo "Cleaning up..."
   killall openbox 2>/dev/null
   kill $X_PID 2>/dev/null
+  
+  if [ -n "$CONTROLLER_MAC" ]; then
+    bluetoothctl disconnect "$CONTROLLER_MAC" 2>/dev/null || true
+  fi
 }
 
 trap cleanup EXIT INT TERM
