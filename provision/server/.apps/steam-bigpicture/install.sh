@@ -29,7 +29,7 @@ sudo ufw allow from $DOCKER_SUBNET to any port 8889 proto tcp comment 'Home Assi
 # Add Steam control to Home Assistant
 if [ -d "$HA_PACKAGES" ]; then
   HA_STEAM="$HA_PACKAGES/steam.yaml"
-  sed "s|__SVC_ADDR__|127.0.0.1|g" steam.yaml.template | \
+  sed "s|__SVC_ADDR__|127.0.0.1|g" steam-control.yaml.template | \
     sudo tee "$HA_STEAM" >/dev/null
 
   sudo chown $HA_USER:$HA_USER "$HA_STEAM"
