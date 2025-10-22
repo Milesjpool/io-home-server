@@ -6,7 +6,7 @@ After=multi-user.target
 Type=simple
 User=root
 ExecStart=/usr/local/bin/start-steam-bigpicture.sh __USER_UID__
-Restart=always
+Restart=on-failure
 RestartSec=5
 
 [Install]
