@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Io Home Server</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .service-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+
+        .service-description {
+            font-size: 0.95rem;
+            color: #718096;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .service-url {
+            font-size: 0.85rem;
+            color: #667eea;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #48bb78;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.8;
+            margin-top: 3rem;
+        }
+
+        .monitoring { color: #e53e3e; }
+        .media { color: #38b2ac; }
+        .productivity { color: #805ad5; }
+        .network { color: #3182ce; }
+        .automation { color: #d69e2e; }
+        .management { color: #38a169; }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            body {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-home"></i> Io Home Server</h1>
+            <p>Your personal network dashboard</p>
+        </div>
+
+        <div class="services-grid">
+            <!-- Monitoring Services -->
+            <a href="http://grafana.io.aesop" class="service-card">
+                <i class="fas fa-chart-line service-icon monitoring"></i>
+                <div class="service-title">
+                    <span class="status-indicator"></span>
+                    Grafana
+                </div>
+                <div class="service-description">
+                    Monitoring dashboards and analytics for system metrics and performance visualization.
+                </div>
+                <div class="service-url">grafana.io.aesop</div>
+            </a>
+
+            <a href="http://prometheus.io.aesop" class="service-card">
+                <i class="fas fa-database service-icon monitoring"></i>
+                <div class="service-title">
+                    <span class="status-indicator"></span>
+                    Prometheus
+                </div>
+                <div class="service-description">
+                    Time-series database for metrics collection and monitoring system alerts.
+                </div>
+                <div class="service-url">prometheus.io.aesop</div>
+            </a>
+
+            <a href="http://alertmanager.io.aesop" class="service-card">
+                <i class="fas fa-bell service-icon monitoring"></i>
+                <div class="service-title">
+                    <span class="status-indicator"></span>
+                    Alertmanager
+                </div>
+                <div class="service-description">
+                    Alert management system for handling and routing notifications from Prometheus.
+                </div>
+                <div class="service-url">alertmanager.io.aesop</div>
+            </a>
+
+            <!-- Media Services -->
+            <a href="http://jellyfin.io.aesop" class="service-card">
+                <i class="fas fa-play-circle service-icon media"></i>
+                <div class="service-title">
+                    <span class="status-indicator"></span>
+                    Jellyfin
+                </div>
+                <div class="service-description">
+                    Free media server for streaming movies, TV shows, and personal media collection.
+                </div>
+                <div class="service-url">jellyfin.io.aesop</div>
+            </a>
+
+            <a href="http://calibre.io.aesop" class="service-card">
+                <i class="fas fa-book service-icon productivity"></i>
+                <div class="service-title">
+                    <span class="status-indicator"></span>
+                    Calibre Web
+                </div>
+                <div class="service-description">
+                    Digital library management and e-book reading platform with web interface.
+                </div>
+                <div class="service-url">calibre.io.aesop</div>
+            </a>
+
+            <!-- Network Services -->
+            <a href="http://adguard.io.aesop" class="service-card">
+                <i class="fas fa-shield-alt service-icon network"></i>
+                <div class="service-title">
+                    <span class="status-indicator"></span>
+                    AdGuard Home
+                </div>
+                <div class="service-description">
+                    Network-wide ad and tracker blocking DNS server for enhanced privacy and security.
+                </div>
+                <div class="service-url">adguard.io.aesop</div>
+            </a>
+
+            <a href="http://vpn.io.aesop" class="service-card">
+                <i class="fas fa-lock service-icon network"></i>
+                <div class="service-title">
+                    <span class="status-indicator"></span>
+                    WireGuard VPN
+                </div>
+                <div class="service-description">
+                    Secure VPN configuration management for remote access to your home network.
+                </div>
+                <div class="service-url">vpn.io.aesop</div>
+            </a>
+
+            <!-- Home Automation -->
+            <a href="http://homeassistant.io.aesop" class="service-card">
+                <i class="fas fa-home service-icon automation"></i>
+                <div class="service-title">
+                    <span class="status-indicator"></span>
+                    Home Assistant
+                </div>
+                <div class="service-description">
+                    Smart home automation platform for controlling and monitoring IoT devices.
+                </div>
+                <div class="service-url">homeassistant.io.aesop</div>
+            </a>
+
+            <!-- Management Services -->
+            <a href="http://portainer.io.aesop" class="service-card">
+                <i class="fas fa-cubes service-icon management"></i>
+                <div class="service-title">
+                    <span class="status-indicator"></span>
+                    Portainer
+                </div>
+                <div class="service-description">
+                    Docker container management interface for easy deployment and monitoring.
+                </div>
+                <div class="service-url">portainer.io.aesop</div>
+            </a>
+
+            <a href="http://desktop.io.aesop" class="service-card">
+                <i class="fas fa-desktop service-icon management"></i>
+                <div class="service-title">
+                    <span class="status-indicator"></span>
+                    Desktop Control
+                </div>
+                <div class="service-description">
+                    Remote desktop access and control interface for server management.
+                </div>
+                <div class="service-url">desktop.io.aesop</div>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p><i class="fas fa-server"></i> Powered by Docker & Caddy | <i class="fas fa-heart"></i> Built with care</p>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate cards on load
+            const cards = document.querySelectorAll('.service-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Add click analytics (optional)
+            cards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    const serviceName = this.querySelector('.service-title').textContent.trim();
+                    console.log(`Navigating to: ${serviceName}`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
