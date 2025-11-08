@@ -47,6 +47,9 @@ services:
     image: grafana/grafana-oss:latest
     container_name: grafana
     user: "${USER_UID}:${USER_GID}"
+    environment:
+      - GF_SERVER_DOMAIN=grafana.aesop.casa
+      - GF_SERVER_ROOT_URL=https://grafana.aesop.casa
     volumes:
       - /srv/monitoring/grafana:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning:ro

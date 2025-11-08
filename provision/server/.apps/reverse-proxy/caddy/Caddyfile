@@ -5,6 +5,14 @@
   }
 }
 
+(tls-public) {
+  tls {
+    issuer acme {
+      disable_http_challenge
+    }
+  }
+}
+
 :80 {
   @grafana host grafana.io.aesop
   handle @grafana {
@@ -59,4 +67,19 @@
   handle {
     respond "Not Found" 404
   }
+}
+
+aesop.casa {
+  import tls-public
+  respond "Not Found" 404
+}
+
+jellyfin.aesop.casa {
+  import tls-public
+  reverse_proxy jellyfin:8096
+}
+
+grafana.aesop.casa {
+  import tls-public
+  reverse_proxy grafana:3000
 }

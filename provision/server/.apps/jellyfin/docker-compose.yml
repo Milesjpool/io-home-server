@@ -8,8 +8,7 @@ services:
     environment:
       - LIBVA_DRIVER_NAME=iHD
     ports:
-      - "127.0.0.1:8096:8096" # HTTP
-      # JELLYFIN_PublishedServerUrl: http://jellyfin.local
+      - "127.0.0.1:8096:8096"
     user: "${USER_UID}:${USER_GID}"
     group_add:
       - "992" # render group for GPU access
