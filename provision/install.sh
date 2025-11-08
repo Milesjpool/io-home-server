@@ -1,5 +1,7 @@
 #! /bin/bash
 
+source private.env
+
 sudo apt update
 sudo apt upgrade -y
 
@@ -24,14 +26,17 @@ fi
 
 sudo update-grub
 
-if ! sudo ss -tlnp | grep -q sshd; then
+if [ -z "$SSHD_PORT" ]; then
   read -p "SSH Port [22]: " input_port
-  SSH_PORT=${input_port:-22}
+  SSHD_PORT=${input_port:-22}
+  echo "SSHD_PORT='$SSHD_PORT'" | sudo tee -a private.env >/dev/null
+fi
 
+if ! sudo ss -tlnp | grep -q sshd; then
   echo "PasswordAuthentication no" | sudo tee -a /etc/ssh/sshd_config
-  echo "Port $SSH_PORT" | sudo tee -a /etc/ssh/sshd_config
+  echo "Port $SSHD_PORT" | sudo tee -a /etc/ssh/sshd_config
 
-  sudo ufw allow $SSH_PORT/tcp comment 'SSH'
+  sudo ufw allow $SSHD_PORT/tcp comment 'SSH'
 fi
 
 sudo systemctl enable --now ssh
