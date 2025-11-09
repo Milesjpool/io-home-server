@@ -1,0 +1,19 @@
+[DEFAULT]
+bantime = 1h
+findtime = 10m
+maxretry = 5
+banaction = ufw
+
+[sshd]
+enabled = true
+backend = systemd
+port = __SSHD_PORT__
+logpath = %(sshd_log)s
+
+[caddy-public]
+enabled = true
+backend = auto
+port = http,https
+logpath = /srv/revproxy/caddy/logs/public_access.log
+banaction = dc-iptables-multiport
+filter = caddy-public
