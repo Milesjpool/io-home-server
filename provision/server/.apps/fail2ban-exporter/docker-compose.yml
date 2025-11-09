@@ -1,0 +1,16 @@
+services:
+  fail2ban-exporter:
+    image: registry.gitlab.com/hctrdev/fail2ban-prometheus-exporter:latest
+    container_name: fail2ban-exporter
+    restart: unless-stopped
+    command:
+      - '--web.listen-address=0.0.0.0:9191'
+      - '--collector.f2b.socket=/var/run/fail2ban/fail2ban.sock'
+    volumes:
+      - /var/run/fail2ban:/var/run/fail2ban:ro
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
