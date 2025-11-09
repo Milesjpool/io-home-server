@@ -68,6 +68,10 @@ vpn.io.aesop:80 {
 # Public services on port 443;
 jellyfin.aesop.casa:443 {
   import tls-public
+  @metrics path /metrics
+  handle @metrics {
+    respond "Forbidden" 403
+  }
   reverse_proxy jellyfin:8096
 }
 

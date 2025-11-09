@@ -24,6 +24,16 @@ scrape_configs:
     static_configs:
       - targets: ["docker-host:2019"]
   
+  - job_name: "jellyfin"
+    metrics_path: /metrics
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: "(.+)"
+        target_label: __name__
+        replacement: "jf_$1"
+    static_configs:
+      - targets: ["jellyfin:8096"]
+  
   - job_name: "desk"
     static_configs:
       - targets: ["desk.aesop:80"]
