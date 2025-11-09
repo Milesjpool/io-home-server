@@ -1,7 +1,7 @@
 {
   admin 0.0.0.0:2019
-  servers {
-    metrics
+  metrics {
+    per_host
   }
 }
 
@@ -20,73 +20,63 @@
   }
 }
 
-:80 {
-  @grafana host grafana.io.aesop
-  handle @grafana {
-    reverse_proxy grafana:3000
-  }
-
-  @prometheus host prometheus.io.aesop
-  handle @prometheus {
-    reverse_proxy prometheus:9090
-  }
-
-  @alertmanager host alertmanager.io.aesop
-  handle @alertmanager {
-    reverse_proxy alertmanager:9093
-  }
-
-  @adguard host adguard.io.aesop
-  handle @adguard {
-    reverse_proxy adguard:80
-  }
-
-  @jellyfin host jellyfin.io.aesop
-  handle @jellyfin {
-    reverse_proxy jellyfin:8096
-  }
-
-  @calibre host calibre.io.aesop
-  handle @calibre {
-    reverse_proxy calibre-web:8083
-  }
-
-  @homeassistant host homeassistant.io.aesop
-  handle @homeassistant {
-    reverse_proxy docker-host:8123
-  }
-
-  @portainer host portainer.io.aesop
-  handle @portainer {
-    reverse_proxy portainer:9000
-  }
-
-  @desktop host desktop.io.aesop
-  handle @desktop {
-    reverse_proxy docker-host:8888
-  }
-
-  @vpn host vpn.io.aesop
-  handle @vpn {
-    reverse_proxy wireguard-configs:8080
-  }
-
-  handle {
-    respond "Not Found" 404
-  }
+# LAN services on port 80;
+grafana.io.aesop:80 {
+  reverse_proxy grafana:3000
 }
 
-aesop.casa {
-  import tls-public
+prometheus.io.aesop:80 {
+  reverse_proxy prometheus:9090
+}
+
+alertmanager.io.aesop:80 {
+  reverse_proxy alertmanager:9093
+}
+
+adguard.io.aesop:80 {
+  reverse_proxy adguard:80
+}
+
+jellyfin.io.aesop:80 {
+  reverse_proxy jellyfin:8096
+}
+
+calibre.io.aesop:80 {
+  reverse_proxy calibre-web:8083
+}
+
+homeassistant.io.aesop:80 {
+  reverse_proxy docker-host:8123
+}
+
+portainer.io.aesop:80 {
+  reverse_proxy portainer:9000
+}
+
+desktop.io.aesop:80 {
+  reverse_proxy docker-host:8888
+}
+
+vpn.io.aesop:80 {
+  reverse_proxy wireguard-configs:8080
+}
+
+:80 {
   respond "Not Found" 404
 }
 
-jellyfin.aesop.casa {
+# Public services on port 443;
+jellyfin.aesop.casa:443 {
   import tls-public
   reverse_proxy jellyfin:8096
 }
 
-grafana.aesop.casa {
+grafana.aesop.casa:443 {
   import tls-public
   reverse_proxy grafana:3000
+}
+
+:443 {
+  import tls-public
+  respond "Not Found" 404
 }
