@@ -5,7 +5,8 @@ source ../../global.env
 SVC_USER='svc-monitoring'
 SVC_HOME='/srv/monitoring'
 
-sudo mkdir -p $SVC_HOME/{prometheus,alertmanager,grafana}
+sudo mkdir -p $SVC_HOME/{prometheus,alertmanager,grafana,loki,promtail}
+sudo mkdir -p $SVC_HOME/grafana/logs
 
 sudo useradd -r -s /usr/sbin/nologin -d $SVC_HOME $SVC_USER
 sudo chown -R $SVC_USER:$SVC_USER $SVC_HOME
