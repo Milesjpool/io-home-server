@@ -25,3 +25,4 @@ port = http,https
 logpath = /srv/revproxy/caddy/logs/internal_access.log
 banaction = dc-iptables-multiport
 filter = caddy
+ignoreip = __NETMASK__
