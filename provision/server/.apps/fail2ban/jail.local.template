@@ -16,4 +16,4 @@ backend = auto
 port = http,https
 logpath = /srv/revproxy/caddy/logs/public_access.log
 banaction = dc-iptables-multiport
-filter = caddy-public
+filter = caddy
