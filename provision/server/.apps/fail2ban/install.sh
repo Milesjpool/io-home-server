@@ -13,3 +13,5 @@ sudo cp "dc-iptables-multiport.conf" /etc/fail2ban/action.d/dc-iptables-multipor
 
 sudo systemctl enable fail2ban
 sudo systemctl restart fail2ban
+
+docker compose up -d --force-recreate
