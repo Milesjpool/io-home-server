@@ -17,3 +17,11 @@ port = http,https
 logpath = /srv/revproxy/caddy/logs/public_access.log
 banaction = dc-iptables-multiport
 filter = caddy
+
+[caddy-internal]
+enabled = true
+backend = auto
+port = http,https
+logpath = /srv/revproxy/caddy/logs/internal_access.log
+banaction = dc-iptables-multiport
+filter = caddy
