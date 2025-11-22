@@ -2,6 +2,8 @@
 
 (cd ..; ./install.sh)
 
+source private.env
+
 exec_user=${SUDO_USER:-$USER}
 
 # Add Docker's official GPG key:
@@ -48,8 +50,13 @@ echo $exec_user
 NAS_CRED_FILE='/root/.nas-credentials'
 if sudo [ ! -f $NAS_CRED_FILE ]; then
   echo "Please enter the following NAS details."
-  read -p "  Hostname: " nas_host
-  echo
+
+  if [ -z "$NAS_HOST" ]; then
+    read -p "  Hostname: " NAS_HOST
+    echo
+    echo "NAS_HOST='$NAS_HOST'" | sudo tee -a 'private.env' > /dev/null
+  fi
+
   read -p "  Username: " nas_user
   read -s -p "  Password: " nas_pass
   echo
@@ -58,7 +65,7 @@ if sudo [ ! -f $NAS_CRED_FILE ]; then
 
   sudo chmod 600 $NAS_CRED_FILE
 
-  echo "//$nas_host/media $MNT_DIR cifs credentials=$NAS_CRED_FILE,vers=3.0,uid=$exec_user,gid=$MNT_GROUP 0 0" | sudo tee -a /etc/fstab
+  echo "//$NAS_HOST/media $MNT_DIR cifs credentials=$NAS_CRED_FILE,vers=3.0,uid=$exec_user,gid=$MNT_GROUP 0 0" | sudo tee -a /etc/fstab
 fi
 
 source private.env
