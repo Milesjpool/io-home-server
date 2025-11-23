@@ -3,6 +3,7 @@
 (cd ..; ./install.sh)
 
 source private.env
+source global.env
 
 exec_user=${SUDO_USER:-$USER}
 
@@ -47,7 +48,6 @@ sudo groupadd $MNT_GROUP
 sudo usermod -aG $MNT_GROUP $exec_user
 echo $exec_user
 
-NAS_CRED_FILE='/root/.nas-credentials'
 if sudo [ ! -f $NAS_CRED_FILE ]; then
   echo "Please enter the following NAS details."
 
