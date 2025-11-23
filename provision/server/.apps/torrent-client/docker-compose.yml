@@ -42,7 +42,7 @@ services:
       - WEBUI_PORT=8080
     volumes:
       - /srv/torrent-client/qbittorrent/config:/config
-      - /mnt/media/torrents:/downloads
+      - /mnt/torrents:/downloads
     depends_on:
       gluetun:
         condition: service_healthy

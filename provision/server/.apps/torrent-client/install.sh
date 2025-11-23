@@ -1,6 +1,7 @@
 #! /bin/bash
 
 source ../../global.env
+source ../../private.env
 source private.env
 
 SVC_USER='svc-torrent'
@@ -10,10 +11,17 @@ sudo useradd -r -s /usr/sbin/nologin -d $SVC_HOME $SVC_USER
 
 sudo mkdir -p $SVC_HOME/gluetun
 sudo mkdir -p $SVC_HOME/qbittorrent/config
-sudo mkdir -p /mnt/media/torrents
+sudo mkdir -p /mnt/torrents
 
 sudo chown -R $SVC_USER:$SVC_USER $SVC_HOME
-sudo chown -R $SVC_USER:$SVC_USER /mnt/media/torrents
+
+if sudo [ -f "$NAS_CRED_FILE" ] && [ -n "$NAS_HOST" ]; then
+  TORRENTS_FSTAB="//$NAS_HOST/media/downloads /mnt/torrents cifs credentials=$NAS_CRED_FILE,vers=3.0,uid=$SVC_USER,gid=$SVC_USER 0 0"
+  if ! grep -q "/mnt/torrents" /etc/fstab; then
+    echo "$TORRENTS_FSTAB" | sudo tee -a /etc/fstab > /dev/null
+  fi
+  sudo mount /mnt/torrents
+fi
 
 if [ -z "$OPENVPN_USER" ]; then
   read -p "Surfshark Username: " OPENVPN_USER
@@ -33,8 +41,6 @@ if [ -z "$SERVER_REGIONS" ]; then
   fi
 fi
 
-# Start services
 USER_UID="$(id $SVC_USER -u)" \
   USER_GID="$(id $SVC_USER -g)" \
-  docker compose up -d
-
+  docker compose up -d --force-recreate
