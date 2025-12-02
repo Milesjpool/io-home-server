@@ -30,7 +30,7 @@
     format json
   }
   @lan {
-    remote_ip 192.168.68.0/24
+    remote_ip 192.168.68.0/24 10.8.0.0/24
   }
   handle {
     respond "Forbidden" 403
