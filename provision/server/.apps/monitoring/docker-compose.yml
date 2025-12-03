@@ -95,6 +95,7 @@ services:
       - /var/log:/var/log:ro
       - /srv/revproxy/caddy/logs:/data/logs/caddy:ro
       - /srv/monitoring/grafana/logs:/data/logs/grafana:ro
+      - /srv/torrent-client/qbittorrent/config/logs:/data/logs/qbittorrent:ro
       - /srv/monitoring/promtail:/data/promtail
       - /etc/machine-id:/etc/machine-id:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro

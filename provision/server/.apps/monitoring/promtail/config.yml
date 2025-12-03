@@ -80,3 +80,26 @@ scrape_configs:
     pipeline_stages:
       - docker: {}
 
+  - job_name: qbittorrent
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: qbittorrent
+          container: qbittorrent
+          host: ${HOSTNAME}
+          __path__: /data/logs/qbittorrent/*.log
+    pipeline_stages:
+      - regex:
+          expression: '.*\((?P<level_code>[INWC])\).*'
+      - template:
+          source: level
+          template: |
+            {{- if eq .level_code "I" -}}debug
+            {{- else if eq .level_code "N" -}}info
+            {{- else if eq .level_code "W" -}}warn
+            {{- else if eq .level_code "C" -}}error
+            {{- else -}}unknown
+            {{- end -}}
+      - labels:
+          level:

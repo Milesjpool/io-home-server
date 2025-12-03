@@ -10,7 +10,7 @@ SVC_HOME='/srv/torrent-client'
 sudo useradd -r -s /usr/sbin/nologin -d $SVC_HOME $SVC_USER
 
 sudo mkdir -p $SVC_HOME/gluetun
-sudo mkdir -p $SVC_HOME/qbittorrent/config
+sudo mkdir -p $SVC_HOME/qbittorrent/config/logs
 sudo mkdir -p /mnt/torrents
 
 sudo chown -R $SVC_USER:$SVC_USER $SVC_HOME
