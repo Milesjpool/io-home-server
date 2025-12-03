@@ -47,6 +47,18 @@ services:
       gluetun:
         condition: service_healthy
 
+  qbittorrent-exporter:
+    image: ghcr.io/martabal/qbittorrent-exporter:latest
+    container_name: qbittorrent-exporter
+    restart: unless-stopped
+    environment:
+      - QBITTORRENT_BASE_URL=http://gluetun:8080
+    networks:
+      proxy:
+        ipv4_address: 172.20.0.200
+    depends_on:
+      - gluetun
+
 networks:
   proxy:
     external: true
