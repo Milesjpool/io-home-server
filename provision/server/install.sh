@@ -30,6 +30,13 @@ sudo cp powertop-autotune.service \
   amdgpu-lowpower.service \
   /etc/systemd/system/
 
+sudo mkdir -p /etc/systemd/system/docker.service.d
+cat <<EOF | sudo tee /etc/systemd/system/docker.service.d/wait-for-remote-fs.conf > /dev/null
+[Unit]
+After=remote-fs.target
+Wants=remote-fs.target
+EOF
+
 sudo systemctl daemon-reload
 sudo systemctl enable --now \
   docker \
