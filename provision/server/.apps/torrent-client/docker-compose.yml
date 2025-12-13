@@ -43,6 +43,12 @@ services:
     volumes:
       - /srv/torrent-client/qbittorrent/config:/config
       - /mnt/torrents:/downloads
+    deploy:
+      resources:
+        limits:
+          memory: 2.5G
+        reservations:
+          memory: 512M
     depends_on:
       gluetun:
         condition: service_healthy
