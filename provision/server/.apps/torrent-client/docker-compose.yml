@@ -30,7 +30,8 @@ services:
       start_period: 30s
 
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:latest
+    build: .
+    image: qbittorrent-rsync
     container_name: qbittorrent
     restart: unless-stopped
     network_mode: service:gluetun
