@@ -1,0 +1,24 @@
+services:
+  snmp-exporter:
+    image: prom/snmp-exporter:latest
+    container_name: snmp-exporter
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/snmp_exporter/snmp.yml'
+      - '--web.listen-address=0.0.0.0:9116'
+    volumes:
+      - ./snmp.yml:/etc/snmp_exporter/snmp.yml:ro
+    networks:
+      - proxy
+    ports:
+      - "127.0.0.1:9116:9116"
+
+networks:
+  proxy:
+    external: true
+
+
+
+
+
+

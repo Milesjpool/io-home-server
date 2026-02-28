@@ -1,0 +1,2 @@
+# Generated snmp.yml contains SNMP credentials and should not be committed
+snmp.yml
