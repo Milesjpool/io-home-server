@@ -1,0 +1,21 @@
+services:
+  slskd:
+    image: slskd/slskd:latest
+    container_name: slskd
+    restart: unless-stopped
+    environment:
+      - SLSKD_HTTP_IP_ADDRESS=0.0.0.0
+      - SLSKD_REMOTE_CONFIGURATION=true
+    volumes:
+      - /srv/slskd/config:/app
+      - /mnt/torrents:/downloads
+      - /mnt/media/Music:/shared/Music:ro
+    ports:
+      - "127.0.0.1:5030:5030/tcp"
+      - "0.0.0.0:50300:50300/tcp"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
