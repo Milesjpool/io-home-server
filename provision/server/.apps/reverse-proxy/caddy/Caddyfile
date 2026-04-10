@@ -111,13 +111,17 @@ torrents.io.aesop:443 {
 }
 
 # Public services on port 443;
-jellyfin.aesop.casa:443 {
+(jellyfin) {
   import tls-public
   @metrics path /metrics
   handle @metrics {
     respond "Forbidden" 403
   }
   reverse_proxy jellyfin:8096
+}
+
+jellyfin.aesop.casa:443 {
+  import jellyfin
 }
 
 grafana.aesop.casa:443 {
@@ -129,3 +133,5 @@ grafana.aesop.casa:443 {
   import tls-public
   respond "Not Found" 404
 }
+
+import /etc/caddy/private/*
