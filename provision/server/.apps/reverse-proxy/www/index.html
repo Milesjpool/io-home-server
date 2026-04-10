@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>aesop</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23222'/><rect x='20' y='38' width='60' height='40' rx='4' fill='%237cb'/><polygon points='10,42 50,18 90,42' fill='%237cb'/></svg>">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: monospace;
+      background: #111;
+      color: #ccc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 24px;
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 1.4em;
+      letter-spacing: 3px;
+      margin-bottom: 28px;
+    }
+
+    .desktop-bar {
+      width: 100%;
+      max-width: 640px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .desktop-bar .left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .desktop-label {
+      color: #888;
+      font-size: 0.75em;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #444;
+      transition: background 0.3s;
+    }
+
+    .status-dot.active { background: #7cb; }
+    .status-dot.inactive { background: #555; }
+
+    .status-text {
+      font-size: 0.9em;
+      color: #aaa;
+    }
+
+    .toggle-btn {
+      font-family: monospace;
+      font-size: 0.8em;
+      padding: 6px 14px;
+      border-radius: 4px;
+      border: 1px solid #3a3a3a;
+      background: #222;
+      color: #aaa;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .toggle-btn:hover { border-color: #7cb; color: #fff; }
+    .toggle-btn:disabled { opacity: 0.4; cursor: default; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      width: 100%;
+      max-width: 640px;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .card .label {
+      color: #888;
+      font-size: 0.75em;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 14px;
+    }
+
+    ul { list-style: none; }
+    li { margin: 8px 0; }
+
+    a {
+      color: #7cb;
+      text-decoration: none;
+      font-size: 0.95em;
+      display: inline-block;
+      transition: color 0.15s;
+    }
+
+    a:hover { color: #fff; }
+  </style>
+</head>
+<body>
+  <h1>io.aesop</h1>
+
+  <div class="desktop-bar">
+    <div class="left">
+      <span class="desktop-label">🖥️ Desktop</span>
+      <span class="status-dot" id="dot"></span>
+      <span class="status-text" id="status-text">…</span>
+    </div>
+    <button class="toggle-btn" id="toggle-btn" disabled onclick="toggle()">…</button>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="label">🎬 Media</div>
+      <ul>
+        <li><a href="http://jellyfin.io.aesop">jellyfin</a></li>
+        <li><a href="http://calibre.io.aesop">calibre</a></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="label">⬇️ Downloads</div>
+      <ul>
+        <li><a href="http://torrents.io.aesop">qbittorrent</a></li>
+        <li><a href="http://soulseek.io.aesop">soulseek</a></li>
+        <li><a href="http://lidarr.io.aesop">lidarr</a></li>
+        <li><a href="http://prowlarr.io.aesop">prowlarr</a></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="label">🔧 Infrastructure</div>
+      <ul>
+        <li><a href="http://homeassistant.io.aesop">home assistant</a></li>
+        <li><a href="http://adguard.io.aesop">adguard</a></li>
+        <li><a href="http://vpn.io.aesop">wireguard</a></li>
+        <li><a href="http://portainer.io.aesop">portainer</a></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="label">📊 Monitoring</div>
+      <ul>
+        <li><a href="http://grafana.io.aesop">grafana</a></li>
+        <li><a href="http://prometheus.io.aesop">prometheus</a></li>
+        <li><a href="http://alertmanager.io.aesop">alertmanager</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const dot = document.getElementById('dot');
+    const statusText = document.getElementById('status-text');
+    const btn = document.getElementById('toggle-btn');
+    let currentState = null;
+
+    async function fetchStatus() {
+      try {
+        const res = await fetch('/desktop/status');
+        const text = (await res.text()).trim();
+        setState(text === 'active');
+      } catch {
+        statusText.textContent = 'unreachable';
+        btn.disabled = true;
+      }
+    }
+
+    function setState(active) {
+      currentState = active;
+      dot.className = 'status-dot ' + (active ? 'active' : 'inactive');
+      statusText.textContent = active ? 'active' : 'inactive';
+      btn.textContent = active ? 'stop' : 'start';
+      btn.disabled = false;
+    }
+
+    async function toggle() {
+      btn.disabled = true;
+      const action = currentState ? 'stop' : 'start';
+      try {
+        await fetch(`/desktop/${action}`);
+      } catch {}
+      setTimeout(fetchStatus, 1500);
+    }
+
+    fetchStatus();
+  </script>
+</body>
+</html>

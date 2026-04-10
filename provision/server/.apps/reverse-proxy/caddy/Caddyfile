@@ -98,6 +98,15 @@ prowlarr.io.aesop:80 {
   reverse_proxy prowlarr:9696
 }
 
+www.io.aesop:80 {
+  handle /desktop/* {
+    uri strip_prefix /desktop
+    reverse_proxy docker-host:8888
+  }
+  root * /srv/www
+  file_server
+}
+
 :80 {
   respond "Not Found" 404
 }
