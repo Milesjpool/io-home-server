@@ -82,6 +82,22 @@ torrents.io.aesop:80 {
   reverse_proxy gluetun:8080
 }
 
+soulseek.io.aesop:80 {
+  reverse_proxy slskd:5030 {
+    header_up Host {host}
+    header_up Upgrade {http_upgrade}
+    header_up Connection {http_connection}
+  }
+}
+
+lidarr.io.aesop:80 {
+  reverse_proxy lidarr:8686
+}
+
+prowlarr.io.aesop:80 {
+  reverse_proxy prowlarr:9696
+}
+
 :80 {
   respond "Not Found" 404
 }
