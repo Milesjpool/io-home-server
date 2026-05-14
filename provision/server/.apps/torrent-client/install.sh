@@ -43,11 +43,12 @@ if [ -z "$SERVER_REGIONS" ]; then
 fi
 
 EXPORTER_IP="172.20.0.200"
+SERVICES_SUBNET="172.20.0.200/29"
 QBIT_CONF="$SVC_HOME/qbittorrent/config/qBittorrent/qBittorrent.conf"
 
-if [ -f "$QBIT_CONF" ] && ! grep -q "$EXPORTER_IP" "$QBIT_CONF"; then
+if [ -f "$QBIT_CONF" ] && ! grep -q "$SERVICES_SUBNET" "$QBIT_CONF"; then
   docker stop qbittorrent 2>/dev/null || true
-  sudo sed -i "s|WebUI\\\\AuthSubnetWhitelist=\(.*\)|WebUI\\\\AuthSubnetWhitelist=\1,$EXPORTER_IP/32|" "$QBIT_CONF"
+  sudo sed -i "s|WebUI\\\\AuthSubnetWhitelist=\(.*\)|WebUI\\\\AuthSubnetWhitelist=\1,$SERVICES_SUBNET|" "$QBIT_CONF"
 fi
 
 USER_UID="$(id $SVC_USER -u)" \
