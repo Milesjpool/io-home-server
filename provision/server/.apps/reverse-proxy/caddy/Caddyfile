@@ -98,6 +98,10 @@ prowlarr.io.aesop:80 {
   reverse_proxy prowlarr:9696
 }
 
+radarr.io.aesop:80 {
+  reverse_proxy radarr:7878
+}
+
 www.io.aesop:80 {
   handle /desktop/* {
     uri strip_prefix /desktop

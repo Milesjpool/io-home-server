@@ -31,9 +31,26 @@ services:
       - PGID=${USER_GID}
     volumes:
       - /srv/servarr/lidarr:/config
+      - /mnt/media/Music:/music:ro
     networks:
       proxy:
         ipv4_address: ${LIDARR_IP}
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    env_file:
+      - ../../global.env
+    environment:
+      - PUID=${USER_UID}
+      - PGID=${USER_GID}
+    volumes:
+      - /srv/servarr/radarr:/config
+      - /mnt/media/Movies:/movies:ro
+    networks:
+      proxy:
+        ipv4_address: ${RADARR_IP}
 
 networks:
   proxy:
