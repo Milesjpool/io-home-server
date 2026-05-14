@@ -62,6 +62,10 @@ calibre.io.aesop:80 {
   reverse_proxy calibre-web:8083
 }
 
+audiobooks.io.aesop:80 {
+  reverse_proxy audiobookshelf:80
+}
+
 homeassistant.io.aesop:80 {
   reverse_proxy docker-host:8123
 }

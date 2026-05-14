@@ -1,0 +1,21 @@
+services:
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    restart: unless-stopped
+    env_file:
+      - ../../global.env
+    user: "${USER_UID}:${USER_GID}"
+    ports:
+      - "127.0.0.1:13378:80"
+    volumes:
+      - /srv/audiobookshelf/config:/config
+      - /srv/audiobookshelf/metadata:/metadata
+      - /mnt/media/Books/Audiobooks:/media/audiobooks
+      - /mnt/media/Podcasts:/media/podcasts
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
