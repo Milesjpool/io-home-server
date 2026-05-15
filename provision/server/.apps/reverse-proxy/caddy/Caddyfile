@@ -141,6 +141,11 @@ jellyfin.aesop.casa:443 {
   import jellyfin
 }
 
+audiobooks.aesop.casa:443 {
+  import tls-public
+  reverse_proxy audiobookshelf:80
+}
+
 grafana.aesop.casa:443 {
   import tls-public
   reverse_proxy grafana:3000
